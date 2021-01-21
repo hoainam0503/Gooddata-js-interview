@@ -1,32 +1,47 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import "@gooddata/react-components/styles/css/main.css";
-import '../containers/style.css'
-
+import "../containers/style.css";
 import { ColumnChart, Model } from "@gooddata/react-components";
+import { DropDownDayMonthYear } from "../components/Month";
+import { DropDownYear } from "../components/Year";
+import { useSelector, useDispatch } from "react-redux";
+import { yearData, monthNumber, dayData } from "../util/common";
+import {
+  setMonth,
+  setMonthEnd,
+  setYear,
+  setYearEnd,
+  setDay,
+  setDayEnd,
+} from "../data/action";
+import { DropDownDay } from "../components/Day";
 
 export const Dashboard = () => {
+  const dispatch = useDispatch();
   const grossProfitMeasure =
     "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/6877";
   const dateAttributeInMonths =
     "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2142";
   const dateAttribute = "/gdc/md/xms7ga4tf3g3nzucd8380o2bev8oeknp/obj/2180";
-  const [month, setMonth] = useState(1);
-  const [year, setYear] = useState(2015);
-  // const [dayStart, setDayStart] = useState('')
+  const { month, year, monthEnd, yearEnd, dayEnd, day } = useSelector(
+    (state) => ({
+      month: state.reducerDateTime.month,
+      year: state.reducerDateTime.year,
+      monthEnd: state.reducerDateTime.monthEnd,
+      yearEnd: state.reducerDateTime.yearEnd,
+      day: state.reducerDateTime.day,
+      dayEnd: state.reducerDateTime.dayEnd,
+    })
+  );
   const getMonthFilter = () => {
     return Model.absoluteDateFilter(
       dateAttribute,
-      `${year}-${month}-01`,
-      `${year}-${month}-31`
+      `${year}-${month}-${day}`,
+      `${yearEnd}-${monthEnd}-${dayEnd}`
     );
   };
-  const changeMonth = (val) => {
-    setMonth(val.target.value);
-  };
-
-  const changeYear = (val) => {
-    setYear(val.target.value);
-  };
+  console.log(day);
+  console.log(dayEnd);
   const getMeasures = () => {
     return [
       Model.measure(grossProfitMeasure)
@@ -38,43 +53,28 @@ export const Dashboard = () => {
   const getViewBy = () => {
     return Model.attribute(dateAttributeInMonths).localIdentifier("a1");
   };
-
-  const renderDropdown = () => {
-    return (
-      <select defaultValue="1" onChange={(val) => changeMonth(val)}>
-        <option value="1">January</option>
-        <option value="2">February</option>
-        <option value="3">March</option>
-        <option value="4">April</option>
-        <option value="5">May</option>
-        <option value="6">June</option>
-        <option value="7">July</option>
-        <option value="8">August</option>
-        <option value="9">September</option>
-        <option value="10">October</option>
-        <option value="11">November</option>
-        <option value="12">December</option>
-      </select>
-    );
+  const onChangeMonth = (val) => {
+    dispatch(setMonth(val.target.value));
   };
 
-  const renderDropdownYear = () => {
-    return (
-      <select defaultValue="2015" onChange={(val) => changeYear(val)}>
-        <option value="2010">2010</option>
-        <option value="2011">2011</option>
-        <option value="2012">2012</option>
-        <option value="2013">2013</option>
-        <option value="2014">2014</option>
-        <option value="2015">2015</option>
-        <option value="2016">2016</option>
-        <option value="2017">2017</option>
-        <option value="2018">2018</option>
-        <option value="2019">2019</option>
-        <option value="2020">2020</option>
-        <option value="2021">2021</option>
-      </select>
-    );
+  const onChangeMonthEnd = (val) => {
+    dispatch(setMonthEnd(val.target.value));
+  };
+
+  const onChangeYear = (val) => {
+    dispatch(setYear(val.target.value));
+  };
+
+  const onChangeYearEnd = (val) => {
+    dispatch(setYearEnd(val.target.value));
+  };
+
+  const onChangeDay = (val) => {
+    dispatch(setDay(val.target.value));
+  };
+
+  const onChangeDayEnd = (val) => {
+    dispatch(setDayEnd(val.target.value));
   };
   const projectId = "xms7ga4tf3g3nzucd8380o2bev8oeknp";
   const filters = [getMonthFilter()];
@@ -83,9 +83,44 @@ export const Dashboard = () => {
   return (
     <div className="dashboard">
       <h1>
-        $ Gross Profit in month {renderDropdown()} - {renderDropdownYear()}
+        $ Gross Profit from month{" "}
+        <DropDownDay
+          arr={dayData}
+          onChangeDay={(val) => onChangeDay(val)}
+          flag={true}
+        />{" "}
+        /{" "}
+        <DropDownDayMonthYear
+          arr={monthNumber}
+          onChangeMonth={(val) => onChangeMonth(val)}
+          flag={true}
+        />{" "}
+        /{" "}
+        <DropDownYear
+          arr={yearData}
+          onChangeYear={(val) => onChangeYear(val)}
+          flag={true}
+        />{" "}
+        to{" "}
+        <DropDownDay
+          arr={dayData}
+          onChangeDay={(val) => onChangeDayEnd(val)}
+          flag={false}
+        />{" "}
+        /{" "}
+        <DropDownDayMonthYear
+          arr={monthNumber}
+          onChangeMonth={(val) => onChangeMonthEnd(val)}
+          flag={false}
+        />{" "}
+        /{" "}
+        <DropDownYear
+          arr={yearData}
+          onChangeYear={(val) => onChangeYearEnd(val)}
+          flag={false}
+        />
       </h1>
-      <div style={{marginBottom: 60}}>
+      <div style={{ marginBottom: 60 }}>
         <ColumnChart
           measures={measures}
           filters={filters}
