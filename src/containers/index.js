@@ -15,6 +15,7 @@ import {
   setDayEnd,
 } from "../data/action";
 import { DropDownDay } from "../components/Day";
+import { DropDownTime } from "../components/index";
 
 export const Dashboard = () => {
   const dispatch = useDispatch();
@@ -84,7 +85,7 @@ export const Dashboard = () => {
     <div className="dashboard">
       <h1>
         $ Gross Profit from month{" "}
-        <DropDownDay
+        {/* <DropDownDay
           arr={dayData}
           onChangeDay={(val) => onChangeDay(val)}
           flag={true}
@@ -118,6 +119,41 @@ export const Dashboard = () => {
           arr={yearData}
           onChangeYear={(val) => onChangeYearEnd(val)}
           flag={false}
+        />{" "} */}
+        <DropDownTime
+          arr={dayData}
+          onChangeTime={(val) => onChangeDay(val)}
+          flag={"day"}
+        />
+        /
+        <DropDownTime
+          arr={monthNumber}
+          onChangeTime={(val) => onChangeMonth(val)}
+          flag={"month"}
+        />
+        /
+        <DropDownTime
+          arr={yearData}
+          onChangeTime={(val) => onChangeYear(val)}
+          flag={"year"}
+        />
+        to
+        <DropDownTime
+          arr={dayData}
+          onChangeTime={(val) => onChangeDayEnd(val)}
+          flag={"dayEnd"}
+        />
+        /
+        <DropDownTime
+          arr={monthNumber}
+          onChangeTime={(val) => onChangeMonthEnd(val)}
+          flag={"monthEnd"}
+        />
+        /
+        <DropDownTime
+          arr={yearData}
+          onChangeTime={(val) => onChangeYearEnd(val)}
+          flag={"yearEnd"}
         />
       </h1>
       <div style={{ marginBottom: 60 }}>
