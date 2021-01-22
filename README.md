@@ -17,7 +17,7 @@ To successfully complete this tutorial, you are required to:
 
 ### Initialization
 
-1. Make a [fork of this repository and clone it](https://help.github.com/en/articles/fork-a-repo).
+1. Make a [fork of this repository and clone it](https://github.com/hoainam0503/Gooddata-js-interview.git).
 2. Run `cd gooddata-js-interview`.
 3. Run `yarn install`.
 4. Run `yarn start`.
@@ -25,7 +25,7 @@ To successfully complete this tutorial, you are required to:
    - If you do not have a GoodData account yet, [create one](https://gooddata-examples.herokuapp.com/registration). After creating a GoodData account, you will be redirected to our GoodData.UI Live Examples. Feel free to get inspired there, but its not related to this homework.
 6. Visit https://localhost:3000/, and make sure that two column charts are loaded like this:
 
-![Screenshot after initialization](https://github.com/gooddata/gooddata-js-interview/blob/master/public/screen.png "Initialization Screenshot")
+![Screenshot after initialization](https://github.com/hoainam0503/Gooddata-js-interview/blob/master/public/screenDateTime.png "Initialization Screenshot")
 
 7. Select the interval to view the statistical report. After selecting the start date and then selecting an end date (Note: the end date cannot be selected before the start date)
 
