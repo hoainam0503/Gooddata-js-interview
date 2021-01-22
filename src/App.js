@@ -1,6 +1,6 @@
 // Copyright (C) 2007-2019, GoodData(R) Corporation. All rights reserved.
 
-import React, { useState } from "react";
+import React from "react";
 import { Dashboard } from "./containers";
 import {Provider} from 'react-redux'
 import store from './data/store'

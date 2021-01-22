@@ -1,11 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import "@gooddata/react-components/styles/css/main.css";
 import "../containers/style.css";
 import { ColumnChart, Model } from "@gooddata/react-components";
-import { DropDownDayMonthYear } from "../components/Month";
-import { DropDownYear } from "../components/Year";
 import { useSelector, useDispatch } from "react-redux";
-import { yearData, monthNumber, dayData } from "../util/common";
 import {
   setMonth,
   setMonthEnd,
@@ -14,8 +11,7 @@ import {
   setDay,
   setDayEnd,
 } from "../data/action";
-import { DropDownDay } from "../components/Day";
-import { DropDownTime } from "../components/index";
+import {SelectDateTime} from '../components/DateTime/index'
 
 export const Dashboard = () => {
   const dispatch = useDispatch();
@@ -41,8 +37,6 @@ export const Dashboard = () => {
       `${yearEnd}-${monthEnd}-${dayEnd}`
     );
   };
-  console.log(day);
-  console.log(dayEnd);
   const getMeasures = () => {
     return [
       Model.measure(grossProfitMeasure)
@@ -54,29 +48,17 @@ export const Dashboard = () => {
   const getViewBy = () => {
     return Model.attribute(dateAttributeInMonths).localIdentifier("a1");
   };
-  const onChangeMonth = (val) => {
-    dispatch(setMonth(val.target.value));
-  };
+  const onChangeTime = (value, dateString) => {
+    const [yy, mm, dd] = dateString[0].split('/').map(e => +e);
+    const [yyEnd, mmEnd, ddEnd] = dateString[1].split('/').map(e => +e);
+    dispatch(setDay(dd));
+    dispatch(setMonth(mm));
+    dispatch(setYear(yy));
+    dispatch(setDayEnd(ddEnd));
+    dispatch(setMonthEnd(mmEnd));
+    dispatch(setYearEnd(yyEnd));
+  }
 
-  const onChangeMonthEnd = (val) => {
-    dispatch(setMonthEnd(val.target.value));
-  };
-
-  const onChangeYear = (val) => {
-    dispatch(setYear(val.target.value));
-  };
-
-  const onChangeYearEnd = (val) => {
-    dispatch(setYearEnd(val.target.value));
-  };
-
-  const onChangeDay = (val) => {
-    dispatch(setDay(val.target.value));
-  };
-
-  const onChangeDayEnd = (val) => {
-    dispatch(setDayEnd(val.target.value));
-  };
   const projectId = "xms7ga4tf3g3nzucd8380o2bev8oeknp";
   const filters = [getMonthFilter()];
   const measures = getMeasures();
@@ -84,77 +66,7 @@ export const Dashboard = () => {
   return (
     <div className="dashboard">
       <h1>
-        $ Gross Profit from month{" "}
-        {/* <DropDownDay
-          arr={dayData}
-          onChangeDay={(val) => onChangeDay(val)}
-          flag={true}
-        />{" "}
-        /{" "}
-        <DropDownDayMonthYear
-          arr={monthNumber}
-          onChangeMonth={(val) => onChangeMonth(val)}
-          flag={true}
-        />{" "}
-        /{" "}
-        <DropDownYear
-          arr={yearData}
-          onChangeYear={(val) => onChangeYear(val)}
-          flag={true}
-        />{" "}
-        to{" "}
-        <DropDownDay
-          arr={dayData}
-          onChangeDay={(val) => onChangeDayEnd(val)}
-          flag={false}
-        />{" "}
-        /{" "}
-        <DropDownDayMonthYear
-          arr={monthNumber}
-          onChangeMonth={(val) => onChangeMonthEnd(val)}
-          flag={false}
-        />{" "}
-        /{" "}
-        <DropDownYear
-          arr={yearData}
-          onChangeYear={(val) => onChangeYearEnd(val)}
-          flag={false}
-        />{" "} */}
-        <DropDownTime
-          arr={dayData}
-          onChangeTime={(val) => onChangeDay(val)}
-          flag={"day"}
-        />
-        /
-        <DropDownTime
-          arr={monthNumber}
-          onChangeTime={(val) => onChangeMonth(val)}
-          flag={"month"}
-        />
-        /
-        <DropDownTime
-          arr={yearData}
-          onChangeTime={(val) => onChangeYear(val)}
-          flag={"year"}
-        />
-        to
-        <DropDownTime
-          arr={dayData}
-          onChangeTime={(val) => onChangeDayEnd(val)}
-          flag={"dayEnd"}
-        />
-        /
-        <DropDownTime
-          arr={monthNumber}
-          onChangeTime={(val) => onChangeMonthEnd(val)}
-          flag={"monthEnd"}
-        />
-        /
-        <DropDownTime
-          arr={yearData}
-          onChangeTime={(val) => onChangeYearEnd(val)}
-          flag={"yearEnd"}
-        />
+        $ Gross Profit from <SelectDateTime dateFormat = "YYYY/MM/DD" onChangeTime={onChangeTime}/>
       </h1>
       <div style={{ marginBottom: 60 }}>
         <ColumnChart
